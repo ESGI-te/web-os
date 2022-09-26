@@ -7,7 +7,7 @@ set -e
 npm run build
 
 # navigate into the build output directory
-cd src/dist
+cd dist
 
 # place .nojekyll to bypass Jekyll processing
 echo > .nojekyll
@@ -24,6 +24,6 @@ git commit -m 'deploy'
 # git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git main
 
 # if you are deploying to https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:tlugat/os-web.git main:src
+git push -f git@github.com:tlugat/os-web.git main:os-web
 
 cd -
