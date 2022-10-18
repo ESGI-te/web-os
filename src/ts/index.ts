@@ -1,1 +1,3 @@
-console.log("Hello, ESGI!")
+import { App } from "./components";
+
+window.addEventListener("load", App.init);
