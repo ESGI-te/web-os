@@ -1,0 +1,26 @@
+@use "variables";
+
+/* media breakpoints */
+
+@mixin mobile-lg {@media only screen and (min-width: variables.$breakpoint-mobile) {@content;}} // 580px
+
+@mixin tablet {@media only screen and (min-width: variables.$breakpoint-tablet) {@content;}} // 768px
+
+@mixin tablet-lg {@media only screen and (min-width: variables.$breakpoint-tablet-lg) {@content;}} // 1024px
+
+@mixin desktop-sm {@media only screen and (min-width: variables.$breakpoint-desktop-sm) {@content;}} // 1200px
+
+@mixin desktop-md {@media only screen and (min-width: variables.$breakpoint-desktop-md) {@content;}} // 1440px
+
+@mixin desktop-lg {@media only screen and (min-width: variables.$breakpoint-desktop-lg) {@content;}} // 1920px
+
+
+/* layouts */
+
+@mixin flex ($direction: row, $justify-content, $align-items, $gap: 0) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify-content;
+    align-items: $align-items;
+    gap: $gap;
+}
