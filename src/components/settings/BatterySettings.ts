@@ -33,12 +33,11 @@ export default class BatterySettings {
 		const isBatteryStateDisplayLabel = document.createElement("label");
 		isBatteryStateDisplayLabel.htmlFor = "isBatteryStateDisplay";
 		isBatteryStateDisplayLabel.textContent = "Afficher l'état de la batterie";
-		isBatteryStateDisplayInputWrapper.appendChild(
-			isBatteryStateDisplayCheckbox
+		isBatteryStateDisplayInputWrapper.append(
+			isBatteryStateDisplayCheckbox,
+			isBatteryStateDisplayLabel
 		);
-		isBatteryStateDisplayInputWrapper.appendChild(isBatteryStateDisplayLabel);
 
-		// Event listeners
 		isBatteryStateDisplayCheckbox.addEventListener("change", () => {
 			this.setVibrationStateDisplay();
 		});
