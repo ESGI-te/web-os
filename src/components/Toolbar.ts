@@ -52,13 +52,13 @@ export default class Toolbar {
 		const isVibrating = navigator.vibrate ? navigator.vibrate(0) : false;
 		const latency = this.getLatency();
 		const battery = await this.getBattery();
+		const batteryLevel = Math.floor(battery.level * 100);
+
 		this.toolbarStateElement.innerHTML = `
         <span class="toolbar-vibration">${
 					isVibrating ? "📳 Actif" : "📳 Inactif"
 				}</span>
-        <span class="toolbar-battery">🔋 ${
-					battery.level * 100 ?? "unknown"
-				}%</span>
+        <span class="toolbar-battery">🔋 ${batteryLevel ?? "unknown"}%</span>
         <span class="toolbar-latency">📶 ${latency}ms</span>`;
 	}
 
