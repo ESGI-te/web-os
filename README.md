@@ -1,30 +1,14 @@
-## Requirements
+# Javascript WEB-OS
 
-- Docker
-- Docker Compose
+A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework, with full [HTTP/2](https://symfony.com/doc/current/weblink.html), HTTP/3 and HTTPS support.
 
-## Usage
+![CI](https://github.com/dunglas/symfony-docker/workflows/CI/badge.svg)
 
-### Docker Compose Services Startup
+## Getting Started
 
-```bash
-docker-compose up --detach
-```
+1. If not already done, [install Docker]
+2. Run `docker build -t my-vite-app .` to build fresh images
+3. Run `docker run -p 8000:8000 my-vite-app` (the logs will be displayed in the current shell)
 
-### Node Packages Installation
+**Enjoy!**
 
-```bash
-docker-compose exec node npm install
-```
-
-### Development Server Startup
-
-```bash
-docker-compose exec node npm start
-```
-
-### Docker Compose Services Shutdown
-
-```bash
-docker-compose down --remove-orphans --volumes --timeout 0
-```
