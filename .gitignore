@@ -2,3 +2,5 @@ node_modules/
 .npm/
 .node_repl_history
 package-lock.json
+# Local Netlify folder
+.netlify
