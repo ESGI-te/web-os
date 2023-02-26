@@ -35,6 +35,10 @@
     padding: 1rem;
     cursor: pointer;
     border-bottom: solid 1px lightgray;
+
+    &.active {
+        background-color: lightblue;
+    }
 }
 
 .settings__form--vibration, .settings__form--battery, .settings__form--datetime, .settings__form--appearance {
