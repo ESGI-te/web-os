@@ -14,6 +14,9 @@
             border-radius: 0.25rem;
             border: solid 1px lightgray;
         }
+        input[type="color"], input[type="radio"] {
+            cursor: pointer;
+        }
     }
 
     .form__section {
@@ -34,7 +37,7 @@
     border-bottom: solid 1px lightgray;
 }
 
-.settings__form--vibration, .settings__form--battery, .settings__form--datetime {
+.settings__form--vibration, .settings__form--battery, .settings__form--datetime, .settings__form--appearance {
     
     .inputGroup {
         display: flex;
@@ -54,5 +57,19 @@
         align-items: center;
         column-gap: 0.5rem;
     }
+}
+
+.settings__form--appearance {
+    // .inputGroup {
+    //     display: flex;
+    //     flex-direction: column;
+    //     row-gap: 0.5rem;
+    // }
+    // & >:first-child {
+    //     flex-direction: row;
+    //     align-items: center;
+    //     column-gap: 0.5rem;
+    // }
+
 }
 
