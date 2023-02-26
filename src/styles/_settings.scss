@@ -15,6 +15,12 @@
             border: solid 1px lightgray;
         }
     }
+
+    .form__section {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+    }
 }
 
 .settings__sidebar {
@@ -28,7 +34,7 @@
     border-bottom: solid 1px lightgray;
 }
 
-.settings__form--vibration, .settings__form--battery {
+.settings__form--vibration, .settings__form--battery, .settings__form--datetime {
     
     .inputGroup {
         display: flex;
