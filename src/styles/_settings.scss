@@ -1,0 +1,33 @@
+.settings {
+    display: flex;
+    height: 100%;
+
+    &__form {
+        flex: 1;
+        padding: 1rem 0.5rem;
+        display: flex;
+        flex-direction: column;
+        row-gap: 2rem;
+    }
+}
+
+.settings__sidebar {
+    height: 100%;
+    border-right: solid 1px lightgray;
+}
+
+.settings__sidebarItem {
+    padding: 1rem;
+    cursor: pointer;
+    border-bottom: solid 1px lightgray;
+}
+
+.settings__form--vibration, .settings__form--battery {
+    
+    .inputGroup {
+        display: flex;
+        align-items: center;
+        column-gap: 0.5rem;
+    }
+}
+
