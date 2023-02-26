@@ -1,4 +1,5 @@
 import BatterySettings from "./settings/BatterySettings";
+import DateTimeSettings from "./settings/DateTimeSettings";
 import LatencySettings from "./settings/LatencySettings";
 import VibrationSettings from "./settings/VibrationSettings";
 
@@ -6,6 +7,7 @@ enum TABS {
 	VIBRATION = "vibration",
 	BATTERY = "battery",
 	LATENCY = "latency",
+	DATETIME = "dateTime",
 }
 
 export default class SettingsManager {
@@ -13,10 +15,12 @@ export default class SettingsManager {
 	private vibrationSettings: VibrationSettings;
 	private batterySettings: BatterySettings;
 	private latencySettings: LatencySettings;
+	private dateTimeSettings: DateTimeSettings;
 	private tabs = {
 		[TABS.VIBRATION]: "Vibration",
 		[TABS.BATTERY]: "Batterie",
 		[TABS.LATENCY]: "Latence",
+		[TABS.DATETIME]: "Date et heures",
 	};
 	private currentTab: TABS;
 
@@ -24,6 +28,7 @@ export default class SettingsManager {
 		this.vibrationSettings = new VibrationSettings();
 		this.batterySettings = new BatterySettings();
 		this.latencySettings = new LatencySettings();
+		this.dateTimeSettings = new DateTimeSettings();
 		this.settingsElement = document.createElement("div");
 		this.settingsElement.classList.add("settings");
 		this.createSidebar();
@@ -35,6 +40,7 @@ export default class SettingsManager {
 			vibration: this.vibrationSettings.getSettings(),
 			battery: this.batterySettings.getSettings(),
 			latency: this.latencySettings.getSettings(),
+			dateTime: this.dateTimeSettings.getSettings(),
 		};
 		localStorage.setItem("settings", JSON.stringify(settings));
 	}
@@ -68,12 +74,13 @@ export default class SettingsManager {
 	}
 
 	private getTabForm(tab: TABS) {
-		const tabsMatch = {
+		const tabsForm = {
 			[TABS.VIBRATION]: this.vibrationSettings.createFormElement(),
 			[TABS.BATTERY]: this.batterySettings.createFormElement(),
 			[TABS.LATENCY]: this.latencySettings.createFormElement(),
+			[TABS.DATETIME]: this.dateTimeSettings.createFormElement(),
 		};
-		return tabsMatch[tab];
+		return tabsForm[tab];
 	}
 
 	public getElement() {
