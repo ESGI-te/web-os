@@ -27,6 +27,7 @@ export default class SettingsManager {
 		[TABS.APPEARANCE]: "Apparence",
 	};
 	private currentTab: TABS;
+	private activeSidebarItem: HTMLElement;
 
 	constructor() {
 		this.vibrationSettings = new VibrationSettings();
@@ -71,9 +72,15 @@ export default class SettingsManager {
 			sidebarItem.id = "settings_tab_item";
 			sidebarItem.classList.add("settings__sidebarItem");
 			sidebar.appendChild(sidebarItem);
-
+			if (key === TABS.VIBRATION) sidebarItem.classList.add("active");
 			sidebarItem.addEventListener("click", () => {
 				this.setTab(key as TABS);
+
+				// Ajouter la classe "active" à l'élément cliqué
+				sidebar
+					.querySelectorAll(".settings__sidebarItem")
+					.forEach((item) => item.classList.remove("active"));
+				sidebarItem.classList.add("active");
 			});
 		});
 		this.settingsElement.append(sidebar);
