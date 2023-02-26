@@ -1,6 +1,22 @@
 
 .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     height: 20px;
-    background-color: red;
+    background-color: #2a2e45;
+    color: #FFFFFF;
+    font-size: 0.75rem;
+    padding-inline: 1rem;
+    .date {
+       
+    }
+
+    .state {
+        display: flex;
+        align-items: center;
+        column-gap: 0.5rem;
+    }
 }
+
