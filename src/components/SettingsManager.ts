@@ -1,3 +1,4 @@
+import AppearanceSettings from "./settings/AppearanceSettings";
 import BatterySettings from "./settings/BatterySettings";
 import DateTimeSettings from "./settings/DateTimeSettings";
 import LatencySettings from "./settings/LatencySettings";
@@ -8,6 +9,7 @@ enum TABS {
 	BATTERY = "battery",
 	LATENCY = "latency",
 	DATETIME = "dateTime",
+	APPEARANCE = "appearance",
 }
 
 export default class SettingsManager {
@@ -16,11 +18,13 @@ export default class SettingsManager {
 	private batterySettings: BatterySettings;
 	private latencySettings: LatencySettings;
 	private dateTimeSettings: DateTimeSettings;
+	private appearanceSettings: AppearanceSettings;
 	private tabs = {
 		[TABS.VIBRATION]: "Vibration",
 		[TABS.BATTERY]: "Batterie",
 		[TABS.LATENCY]: "Latence",
 		[TABS.DATETIME]: "Date et heures",
+		[TABS.APPEARANCE]: "Apparence",
 	};
 	private currentTab: TABS;
 
@@ -29,6 +33,7 @@ export default class SettingsManager {
 		this.batterySettings = new BatterySettings();
 		this.latencySettings = new LatencySettings();
 		this.dateTimeSettings = new DateTimeSettings();
+		this.appearanceSettings = new AppearanceSettings();
 		this.settingsElement = document.createElement("div");
 		this.settingsElement.classList.add("settings");
 		this.createSidebar();
@@ -41,6 +46,7 @@ export default class SettingsManager {
 			battery: this.batterySettings.getSettings(),
 			latency: this.latencySettings.getSettings(),
 			dateTime: this.dateTimeSettings.getSettings(),
+			appearance: this.appearanceSettings.getSettings(),
 		};
 		localStorage.setItem("settings", JSON.stringify(settings));
 	}
@@ -79,6 +85,7 @@ export default class SettingsManager {
 			[TABS.BATTERY]: this.batterySettings.createFormElement(),
 			[TABS.LATENCY]: this.latencySettings.createFormElement(),
 			[TABS.DATETIME]: this.dateTimeSettings.createFormElement(),
+			[TABS.APPEARANCE]: this.appearanceSettings.createFormElement(),
 		};
 		return tabsForm[tab];
 	}
