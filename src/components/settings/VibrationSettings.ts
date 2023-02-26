@@ -36,10 +36,8 @@ export default class VibrationSettings {
 		isVibrationStateDisplayLabel.htmlFor = "isVibrationStateDisplay";
 		isVibrationStateDisplayLabel.textContent =
 			"Afficher l'état de la vibration";
-		isVibrationStateDisplayInputWrapper.appendChild(
-			isVibrationStateDisplayCheckbox
-		);
-		isVibrationStateDisplayInputWrapper.appendChild(
+		isVibrationStateDisplayInputWrapper.append(
+			isVibrationStateDisplayCheckbox,
 			isVibrationStateDisplayLabel
 		);
 
@@ -53,10 +51,11 @@ export default class VibrationSettings {
 		const hapticFeedbackLabel = document.createElement("label");
 		hapticFeedbackLabel.htmlFor = "hapticFeedback";
 		hapticFeedbackLabel.textContent = "Activer les retours haptiques";
-		hapticFeedbackInputWrapper.appendChild(hapticFeedbackCheckbox);
-		hapticFeedbackInputWrapper.appendChild(hapticFeedbackLabel);
+		hapticFeedbackInputWrapper.append(
+			hapticFeedbackCheckbox,
+			hapticFeedbackLabel
+		);
 
-		// Event listeners
 		isVibrationStateDisplayCheckbox.addEventListener("change", () => {
 			this.setVibrationStateDisplay();
 		});

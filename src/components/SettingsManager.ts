@@ -1,4 +1,5 @@
 import BatterySettings from "./settings/BatterySettings";
+import LatencySettings from "./settings/LatencySettings";
 import VibrationSettings from "./settings/VibrationSettings";
 
 enum TABS {
@@ -11,18 +12,18 @@ export default class SettingsManager {
 	private settingsElement: HTMLElement;
 	private vibrationSettings: VibrationSettings;
 	private batterySettings: BatterySettings;
-	// private latencySettings: LatencySettings;
+	private latencySettings: LatencySettings;
 	private tabs = {
 		[TABS.VIBRATION]: "Vibration",
 		[TABS.BATTERY]: "Batterie",
 		[TABS.LATENCY]: "Latence",
 	};
-
 	private currentTab: TABS;
 
 	constructor() {
 		this.vibrationSettings = new VibrationSettings();
 		this.batterySettings = new BatterySettings();
+		this.latencySettings = new LatencySettings();
 		this.settingsElement = document.createElement("div");
 		this.settingsElement.classList.add("settings");
 		this.createSidebar();
@@ -33,7 +34,7 @@ export default class SettingsManager {
 		const settings = {
 			vibration: this.vibrationSettings.getSettings(),
 			battery: this.batterySettings.getSettings(),
-			// latency: this.latencySettings.getSettings(),
+			latency: this.latencySettings.getSettings(),
 		};
 		localStorage.setItem("settings", JSON.stringify(settings));
 	}
@@ -70,7 +71,7 @@ export default class SettingsManager {
 		const tabsMatch = {
 			[TABS.VIBRATION]: this.vibrationSettings.createFormElement(),
 			[TABS.BATTERY]: this.batterySettings.createFormElement(),
-			// [TABS.LATENCY]: "Latence",
+			[TABS.LATENCY]: this.latencySettings.createFormElement(),
 		};
 		return tabsMatch[tab];
 	}
