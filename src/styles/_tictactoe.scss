@@ -12,10 +12,7 @@
     flex-wrap: wrap;
     place-content: space-between;
     max-width: 302px;
-<<<<<<< HEAD
-=======
     margin: 0.5rem;
->>>>>>> 8a417da9b21cbdf9744fe94356e21e8e2e57e75d
   }
 
   .btn{
@@ -24,10 +21,7 @@
 
   .game-announcement{
     width: 100%;
-<<<<<<< HEAD
-=======
     color: var(--typo);
->>>>>>> 8a417da9b21cbdf9744fe94356e21e8e2e57e75d
     text-align-last: center;
   }
   .cell {
@@ -77,13 +71,6 @@
   }
   
   .modal {
-<<<<<<< HEAD
-    background-color: #fff;
-    border-radius: 5px;
-    padding: 20px;
-    width: 400px;
-    max-height: 400px;
-=======
     background-color: var(--primary);
     border-radius: 5px;
     padding: 1rem;
@@ -92,7 +79,6 @@
     max-height: 416px;
     flex-direction: column;
     color: var(--typo);
->>>>>>> 8a417da9b21cbdf9744fe94356e21e8e2e57e75d
     overflow-y: auto;
   }
   
@@ -105,10 +91,7 @@
   .modal li {
     margin-bottom: 10px;
     font-size: 16px;
-<<<<<<< HEAD
-=======
     text-align-last: center;
->>>>>>> 8a417da9b21cbdf9744fe94356e21e8e2e57e75d
   }
   
   .modal button {
