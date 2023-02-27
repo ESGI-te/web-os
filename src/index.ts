@@ -2,8 +2,10 @@ import Desktop from "./components/Desktop";
 import SettingsManager from "./components/SettingsManager";
 import "./styles/main.scss";
 import Calculator from "./components/Calculator";
+import TicTacToeGame from "./components/TicTacToe";
 
 const desktop = new Desktop();
+const ticTacToeGame = new TicTacToeGame();
 
 const windowContent1 = document.createElement("div");
 windowContent1.textContent = "It works 1";
@@ -26,6 +28,7 @@ desktop.createWindow({
 	height: 500,
 	content: settingsManager.getElement(),
 });
+
 desktop.createWindow({
 	title: "Window 2",
 	x: 100,
@@ -43,3 +46,12 @@ desktop.createWindow({
 	height: 620,
 	content: calculator.createCalculator(),
 });
+desktop.createWindow({
+	title: "Tic Tac Toe",
+	x: 50,
+	y: 50,
+	width: 325,
+	height: 430,
+	content: ticTacToeGame.getElement(),
+});
+	
