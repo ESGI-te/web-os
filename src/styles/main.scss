@@ -1,9 +1,11 @@
 @import 'reset.scss';
+@import 'theme.scss';
 @import 'toolbar.scss';
 @import 'taskbar.scss';
 @import 'window.scss';
 @import 'desktop.scss';
 @import '_settings.scss';
+
 
 .app {
     display: flex;
@@ -16,6 +18,4 @@
 
 
 
-
-  
 
