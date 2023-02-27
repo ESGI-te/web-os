@@ -1,7 +1,6 @@
 
 .window {
     position: absolute;
-    background-color: #fff;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -35,10 +34,12 @@
   
 .window-body {
     flex: 1;
+    align-self: center; 
     align-self: stretch;
     max-height: 100%;
     overflow-y: auto;
     border-bottom-right-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
+    background-color: var(--primary);
 }
 
