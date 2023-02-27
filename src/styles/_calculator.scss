@@ -2,33 +2,20 @@
 .calculator {
   width: 400px;
   margin: 0 auto;
-<<<<<<< HEAD
   background-color: #222;
   border-radius: 5px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-=======
-  border-radius: 5px;
->>>>>>> 8a417da9b21cbdf9744fe94356e21e8e2e57e75d
   padding: 30px;
 }
 .calculator-screen {
   width: 100%;
-<<<<<<< HEAD
-  background-color: #333;
-  border-radius: 5px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-  font-size: 36px;
-  text-align: right;
-  padding: 10px;
-=======
   background-color: var(--primary);
   border-radius: 5px;
   box-shadow: inset 0 0 5px rgb(0 0 0 / 50%);
   font-size: 36px;
+  color: var(--typo);
   text-align: right;
   padding: 10px;
-  color: var(--typo);
->>>>>>> 8a417da9b21cbdf9744fe94356e21e8e2e57e75d
   margin-bottom: 20px;
 }
 .calculator-keys {
@@ -44,11 +31,7 @@
   padding: 20px;
   font-size: 24px;
   cursor: pointer;
-<<<<<<< HEAD
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-=======
   box-shadow: 0 0 1px rgb(0 0 0 / 50%);
->>>>>>> 8a417da9b21cbdf9744fe94356e21e8e2e57e75d
 }
 .calculator-keys button:hover {
   background-color: #ccc;
