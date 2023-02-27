@@ -1,26 +1,28 @@
-interface Settings {
+import { ISettings } from "../SettingsManager";
+
+export interface IAppearanceSettings {
 	isDarkTheme: boolean;
 	backgroundColor: string;
 }
 
 export default class AppearanceSettings {
-	settings: Settings;
+	settings: IAppearanceSettings = {
+		isDarkTheme: false,
+		backgroundColor: "#FFFFFF",
+	};
 
 	constructor() {
-		const storedSettings: string | null = localStorage.getItem("appearance");
-		this.settings = storedSettings
-			? JSON.parse(storedSettings)
-			: {
-					isDarkTheme: false,
-					backgroundColor: "#FFFFFF",
-			  };
+		const storedSettings: string | null = localStorage.getItem("settings");
+		if (storedSettings) {
+			this.settings = JSON.parse(storedSettings).appearance;
+		}
 	}
 
-	public getSettings() {
+	public getSettings = () => {
 		return this.settings;
-	}
+	};
 
-	public createFormElement() {
+	public createFormElement = () => {
 		const formElement = document.createElement("form");
 		formElement.classList.add("settings__form", "settings__form--appearance");
 
@@ -88,17 +90,33 @@ export default class AppearanceSettings {
 		formElement.append(themeSettingsWrapper, backgroundColorInputWrapper);
 
 		return formElement;
-	}
+	};
 
-	private setLightTheme() {
+	private setLightTheme = () => {
 		this.settings.isDarkTheme = false;
-	}
+	};
 
-	private setDarkTheme() {
+	private setDarkTheme = () => {
 		this.settings.isDarkTheme = true;
-	}
+	};
 
 	private setBackgroundColor(color: string) {
 		this.settings.backgroundColor = color;
 	}
+
+	public applySettings = () => {
+		const storedSettings = JSON.parse(
+			localStorage.getItem("settings") as string
+		);
+
+		const newSettings: ISettings = {
+			...storedSettings,
+			appearance: this.settings,
+		};
+		localStorage.setItem("settings", JSON.stringify(newSettings));
+		const event = new CustomEvent("appearanceSettingsUpdated", {
+			detail: { settings: this.settings },
+		});
+		window.dispatchEvent(event);
+	};
 }

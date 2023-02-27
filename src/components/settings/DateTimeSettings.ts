@@ -1,4 +1,7 @@
-interface Settings {
+import { ISettings } from "../SettingsManager";
+
+export interface IDatetimeSettings {
+	showTime: boolean;
 	showHours: boolean;
 	showMinutes: boolean;
 	showSeconds: boolean;
@@ -9,28 +12,29 @@ interface Settings {
 }
 
 export default class DateTimeSettings {
-	settings: Settings;
+	settings: IDatetimeSettings = {
+		showTime: true,
+		showHours: true,
+		showMinutes: true,
+		showSeconds: false,
+		showDate: true,
+		showYear: true,
+		showMonth: true,
+		showDay: true,
+	};
 
 	constructor() {
-		const storedSettings: string | null = localStorage.getItem("dateTime");
-		this.settings = storedSettings
-			? JSON.parse(storedSettings)
-			: {
-					showHours: true,
-					showMinutes: true,
-					showSeconds: true,
-					showDate: true,
-					showYear: true,
-					showMonth: true,
-					showDay: true,
-			  };
+		const storedSettings: string | null = localStorage.getItem("settings");
+		if (storedSettings) {
+			this.settings = JSON.parse(storedSettings).dateTime;
+		}
 	}
 
-	public getSettings() {
+	public getSettings = () => {
 		return this.settings;
-	}
+	};
 
-	public createFormElement() {
+	public createFormElement = () => {
 		const formElement = document.createElement("form");
 		formElement.classList.add("settings__form", "settings__form--datetime");
 
@@ -41,6 +45,18 @@ export default class DateTimeSettings {
 		timeSettingsTitle.textContent = "Configurer l'affichage de la date";
 		timeSettingsWrapper.appendChild(timeSettingsTitle);
 
+		// Date display checkbox
+		const showTimeInputWrapper = document.createElement("div");
+		showTimeInputWrapper.classList.add("inputGroup");
+		const showTimeCheckbox = document.createElement("input");
+		showTimeCheckbox.type = "checkbox";
+		showTimeCheckbox.id = "showTime";
+		showTimeCheckbox.checked = true;
+		const showTimeLabel = document.createElement("label");
+		showTimeLabel.htmlFor = "showTime";
+		showTimeLabel.textContent = "Afficher l'heure";
+		showTimeInputWrapper.append(showTimeCheckbox, showTimeLabel);
+
 		// Display hours checkbox
 		const showHoursInputWrapper = document.createElement("div");
 		showHoursInputWrapper.classList.add("inputGroup");
@@ -50,7 +66,7 @@ export default class DateTimeSettings {
 		showHoursCheckbox.checked = this.settings.showHours;
 		const showHoursLabel = document.createElement("label");
 		showHoursLabel.htmlFor = "showHours";
-		showHoursLabel.textContent = "Afficher l'heure";
+		showHoursLabel.textContent = "Afficher les heures";
 		showHoursInputWrapper.append(showHoursCheckbox, showHoursLabel);
 
 		// Display minutes checkbox
@@ -78,6 +94,7 @@ export default class DateTimeSettings {
 		showSecondsInputWrapper.append(showSecondsCheckbox, showSecondsLabel);
 
 		timeSettingsWrapper.append(
+			showTimeInputWrapper,
 			showHoursInputWrapper,
 			showMinutesInputWrapper,
 			showSecondsInputWrapper
@@ -146,6 +163,9 @@ export default class DateTimeSettings {
 			showDayInputWrapper
 		);
 
+		showTimeCheckbox.addEventListener("change", () => {
+			this.setShowTime();
+		});
 		showHoursCheckbox.addEventListener("change", () => {
 			this.setShowHours();
 		});
@@ -171,33 +191,51 @@ export default class DateTimeSettings {
 		formElement.append(dateSettingsWrapper, timeSettingsWrapper);
 
 		return formElement;
-	}
+	};
 
-	private setShowHours() {
+	private setShowTime = () => {
+		this.settings.showTime = !this.settings.showTime;
+	};
+	private setShowHours = () => {
 		this.settings.showHours = !this.settings.showHours;
-	}
+	};
 
-	private setShowMinutes() {
+	private setShowMinutes = () => {
 		this.settings.showMinutes = !this.settings.showMinutes;
-	}
+	};
 
-	private setShowSeconds() {
+	private setShowSeconds = () => {
 		this.settings.showSeconds = !this.settings.showSeconds;
-	}
+	};
 
-	private setShowDate() {
+	private setShowDate = () => {
 		this.settings.showDate = !this.settings.showDate;
-	}
+	};
 
-	private setShowYear() {
+	private setShowYear = () => {
 		this.settings.showYear = !this.settings.showYear;
-	}
+	};
 
-	private setShowMonth() {
+	private setShowMonth = () => {
 		this.settings.showMonth = !this.settings.showMonth;
-	}
+	};
 
-	private setShowDay() {
+	private setShowDay = () => {
 		this.settings.showDay = !this.settings.showDay;
-	}
+	};
+	public applySettings = () => {
+		const storedSettings = JSON.parse(
+			localStorage.getItem("settings") as string
+		);
+
+		const newSettings: ISettings = {
+			...storedSettings,
+			dateTime: this.settings,
+		};
+		localStorage.setItem("settings", JSON.stringify(newSettings));
+		const event = new CustomEvent("dateTimeSettingsUpdated", {
+			detail: { settings: this.settings },
+		});
+		window.dispatchEvent(event);
+	};
 }
