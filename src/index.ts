@@ -42,15 +42,24 @@ desktop.createWindow({
 	title: "Calulator",
 	x: 0,
 	y: 100,
+<<<<<<< HEAD
 	width: 550,
 	height: 620,
+=======
+	width: 400,
+	height: 600,
+>>>>>>> 8a417da9b21cbdf9744fe94356e21e8e2e57e75d
 	content: calculator.createCalculator(),
 });
 desktop.createWindow({
 	title: "Tic Tac Toe",
 	x: 50,
 	y: 50,
+<<<<<<< HEAD
 	width: 325,
+=======
+	width: 320,
+>>>>>>> 8a417da9b21cbdf9744fe94356e21e8e2e57e75d
 	height: 430,
 	content: ticTacToeGame.getElement(),
 });

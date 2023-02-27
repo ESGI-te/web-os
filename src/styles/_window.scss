@@ -1,7 +1,10 @@
 
 .window {
     position: absolute;
+<<<<<<< HEAD
     background-color: #fff;
+=======
+>>>>>>> 8a417da9b21cbdf9744fe94356e21e8e2e57e75d
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -35,10 +38,18 @@
   
 .window-body {
     flex: 1;
+<<<<<<< HEAD
+=======
+    align-self: center; 
+>>>>>>> 8a417da9b21cbdf9744fe94356e21e8e2e57e75d
     align-self: stretch;
     max-height: 100%;
     overflow-y: auto;
     border-bottom-right-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
+<<<<<<< HEAD
+=======
+    background-color: var(--primary);
+>>>>>>> 8a417da9b21cbdf9744fe94356e21e8e2e57e75d
 }
 
