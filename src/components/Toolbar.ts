@@ -1,10 +1,5 @@
 import { ISettings } from "./SettingsManager";
 
-interface DisplayStatusBarSettings {
-	showBattery?: boolean;
-	showLatency?: boolean;
-	showVibration?: boolean;
-}
 interface DisplayDateSettings {
 	showDate?: boolean;
 	showYear?: boolean;
@@ -13,7 +8,7 @@ interface DisplayDateSettings {
 }
 
 interface DisplayTimeSettings {
-	showTime?: true;
+	showTime?: boolean;
 	showHours?: boolean;
 	showMinutes?: boolean;
 	showSeconds?: boolean;
@@ -23,11 +18,14 @@ type DisplayDateTimeSettings = DisplayDateSettings & DisplayTimeSettings;
 
 export default class Toolbar {
 	private toolbarElement: HTMLElement;
-	private toolbarStateElement: HTMLElement;
+	private vibrationStatusElement: HTMLElement;
+	private batteryStatusElement: HTMLElement;
+	private latencyStatusElement: HTMLElement;
 	private toolbarDateElement: HTMLElement;
-	private statusBarSettings: DisplayStatusBarSettings = {
+	private batterySettings = {
 		showBattery: true,
-		showLatency: true,
+	};
+	private vibrationSettings = {
 		showVibration: true,
 	};
 	private dateTimeSettings: DisplayDateTimeSettings = {
@@ -38,40 +36,41 @@ export default class Toolbar {
 		showTime: true,
 		showHours: true,
 		showMinutes: true,
-		showSeconds: true,
+		showSeconds: false,
 	};
-
+	private latencySettings = {
+		showLatency: true,
+		domainName: "https://pokeapi.co/api/v2/pokemon/charizard",
+		refreshFrequency: 10000,
+	};
 	constructor() {
 		this.toolbarElement = document.createElement("div");
 		this.toolbarElement.classList.add("toolbar");
-		this.toolbarStateElement = document.createElement("div");
 		this.toolbarDateElement = document.createElement("div");
-
 		this.toolbarDateElement.classList.add("dateTime");
-		this.toolbarStateElement.classList.add("state");
-
-		this.toolbarElement.append(
-			this.toolbarDateElement,
-			this.toolbarStateElement
-		);
+		const statusBarElement = this.createStatusBar();
+		this.toolbarElement.append(this.toolbarDateElement, statusBarElement);
 		const storedSettings: string | null = localStorage.getItem("settings");
 		if (storedSettings) {
-			const settings: ISettings = JSON.parse(storedSettings);
-			this.statusBarSettings = {
-				showBattery: settings.battery.showBattery,
-				showLatency: settings.latency.showLatency,
-				showVibration: settings.vibration.showVibration,
-			};
+			const settings = JSON.parse(storedSettings);
+			this.setSettings(settings);
 		}
 
 		this.updateDateTime();
-		this.updateStatusBar();
+		this.updateBatteryStatus();
+		this.updateLatencyStatus();
+
 		setInterval(() => {
 			this.updateDateTime();
 		}, 1000);
 
 		setInterval(() => {
-			this.updateStatusBar();
+			this.updateLatencyStatus();
+		}, this.latencySettings.refreshFrequency);
+
+		setInterval(() => {
+			this.updateBatteryStatus();
+			this.updateVibrationStatus();
 		}, 60000);
 
 		this.attachEventListeners();
@@ -84,11 +83,12 @@ export default class Toolbar {
 			"batterySettingsUpdated",
 			(event: CustomEvent) => {
 				const updatedSettings = event.detail.settings;
-				this.statusBarSettings = {
-					...this.statusBarSettings,
+				if (this.batterySettings.showBattery === updatedSettings.showBattery)
+					return;
+				this.batterySettings = {
 					showBattery: updatedSettings.showBattery,
 				};
-				this.updateStatusBar();
+				this.updateBatteryStatus();
 			}
 		);
 		window.addEventListener<any>(
@@ -96,27 +96,22 @@ export default class Toolbar {
 			(event: CustomEvent) => {
 				const updatedSettings = event.detail.settings;
 				if (
-					this.statusBarSettings.showVibration === updatedSettings.showVibration
+					this.vibrationSettings.showVibration === updatedSettings.showVibration
 				)
 					return;
-				this.statusBarSettings = {
-					...this.statusBarSettings,
+				this.vibrationSettings = {
 					showVibration: updatedSettings.showVibration,
 				};
-				this.updateStatusBar();
+				this.updateVibrationStatus();
 			}
 		);
 		window.addEventListener<any>(
 			"latencySettingsUpdated",
 			(event: CustomEvent) => {
 				const updatedSettings = event.detail.settings;
-				if (this.statusBarSettings.showLatency === updatedSettings.showLatency)
-					return;
-				this.statusBarSettings = {
-					...this.statusBarSettings,
-					showLatency: updatedSettings.showLatency,
-				};
-				this.updateStatusBar();
+				if (this.latencySettings === updatedSettings.showLatency) return;
+				this.latencySettings = updatedSettings;
+				this.updateLatencyStatus();
 			}
 		);
 		window.addEventListener<any>(
@@ -131,17 +126,11 @@ export default class Toolbar {
 		window.addEventListener<any>("settingsUpdated", (event: CustomEvent) => {
 			const updatedSettings = event.detail.settings;
 			if (!updatedSettings) return;
-			this.statusBarSettings = {
-				showLatency: updatedSettings.latency.showLatency,
-				showVibration: updatedSettings.vibration.showVibration,
-				showBattery: updatedSettings.battery.showBattery,
-			};
-			if (updatedSettings.dateTime !== this.dateTimeSettings) {
-				this.dateTimeSettings = updatedSettings.dateTime;
-				this.updateDateTime();
-			}
-
-			this.updateStatusBar();
+			this.setSettings(updatedSettings);
+			this.updateDateTime();
+			this.updateBatteryStatus();
+			this.updateVibrationStatus();
+			this.updateLatencyStatus();
 		});
 	};
 
@@ -177,77 +166,128 @@ export default class Toolbar {
 
 	private formatDate = (date: Date, settings: DisplayDateSettings): string => {
 		const day = settings.showDay
-			? date.toLocaleDateString("fr-FR", { day: "2-digit" })
+			? date.toLocaleDateString("fr-FR", { day: "2-digit" }) + " / "
 			: "";
 		const month = settings.showMonth
-			? date.toLocaleDateString("fr-FR", { month: "2-digit" })
+			? date.toLocaleDateString("fr-FR", { month: "2-digit" }) + " / "
 			: "";
 		const year = settings.showYear
 			? date.toLocaleDateString("fr-FR", { year: "2-digit" })
 			: "";
-		const separator = day && (month || year) ? " / " : "";
-		return settings.showDate
-			? `${day}${separator}${month}${separator}${year}`
-			: "";
+		// const separator = day || month ? " / " : "";
+		return settings.showDate ? `${day}${month}${year}` : "";
 	};
 
 	private formatTime = (date: Date, settings: DisplayTimeSettings): string => {
 		const hours = settings.showHours
-			? date.getHours().toString().padStart(2, "0")
+			? date.getHours().toString().padStart(2, "0") + " : "
 			: "";
 		const minutes = settings.showMinutes
-			? date.getMinutes().toString().padStart(2, "0")
+			? date.getMinutes().toString().padStart(2, "0") + " : "
 			: "";
 		const seconds = settings.showSeconds
 			? date.getSeconds().toString().padStart(2, "0")
 			: "";
-		const separator = hours && (minutes || seconds) ? " : " : "";
-		return settings.showTime
-			? `${hours}${separator}${minutes}${separator}${seconds}`
-			: "";
+		return settings.showTime ? `${hours}${minutes}${seconds}` : "";
 	};
 
-	private updateStatusBar = async () => {
-		const { showBattery, showLatency, showVibration } = this.statusBarSettings;
+	private createStatusBar = () => {
+		const statusBarElement = document.createElement("div");
+		statusBarElement.classList.add("status");
+
+		this.vibrationStatusElement = document.createElement("span");
+		this.vibrationStatusElement.textContent = this.getVibrationStatus();
+
+		this.batteryStatusElement = document.createElement("span");
+		this.batteryStatusElement.textContent = "🔋 unknown";
+
+		this.latencyStatusElement = document.createElement("span");
+		this.latencyStatusElement.textContent = "📶 0ms";
+
+		statusBarElement.append(
+			this.vibrationStatusElement,
+			this.batteryStatusElement,
+			this.latencyStatusElement
+		);
+
+		return statusBarElement;
+	};
+
+	private updateLatencyStatus = async () => {
+		if (!this.latencySettings.showLatency) {
+			this.latencyStatusElement.style.display = "none";
+			return;
+		}
+		this.latencyStatusElement.style.display = "block";
+		this.latencyStatusElement.textContent = await this.getLatencyStatus();
+	};
+
+	private updateBatteryStatus = async () => {
+		if (!this.batterySettings.showBattery) {
+			this.batteryStatusElement.style.display = "none";
+			return;
+		}
+		this.batteryStatusElement.style.display = "block";
+		this.batteryStatusElement.textContent = await this.getBatteryStatus();
+	};
+
+	private updateVibrationStatus() {
+		if (!this.vibrationSettings.showVibration) {
+			this.vibrationStatusElement.style.display = "none";
+			return;
+		}
+		this.vibrationStatusElement.style.display = "block";
+		this.vibrationStatusElement.textContent = this.getVibrationStatus();
+	}
+
+	private getLatencyStatus = async (): Promise<string> => {
+		let frequency = 0;
+		const startTime = Date.now();
+		await fetch(this.latencySettings.domainName);
+		frequency = Date.now() - startTime;
+
+		return `📶 ${frequency}ms`;
+	};
+
+	private getVibrationStatus = (): string => {
 		const isVibrating = navigator.vibrate ? navigator.vibrate(0) : false;
-		const latency = this.getLatency();
-		const battery = await this.getBattery();
-		const batteryLevel = Math.floor(battery.level * 100);
-
-		this.toolbarStateElement.innerHTML = `
-        <span class="toolbar-vibration">${
-					showVibration ? (isVibrating ? "📳 Actif" : "📳 Inactif") : ""
-				}</span>
-        <span class="toolbar-battery">${
-					showBattery ? `🔋 ${batteryLevel}%` : ""
-				}</span>
-        <span class="toolbar-latency">${
-					showLatency ? `📶 ${latency}ms` : ""
-				}</span>`;
+		return isVibrating ? "📳 Actif" : "📳 Inactif";
 	};
 
-	private getLatency = () => {
-		let latency = 0;
-
-		const observer = new PerformanceObserver((list) => {
-			const entries = list.getEntries() as PerformanceNavigationTiming[];
-			for (const entry of entries) {
-				if (entry.name === "navigation") {
-					latency = entry.responseEnd - entry.requestStart;
-				}
-			}
-		});
-
-		observer.observe({ type: "navigation", buffered: true });
-
-		return latency;
-	};
-
-	getBattery = async () => {
+	private getBatteryStatus = async () => {
+		let batteryLevel = "";
 		try {
-			return await navigator.getBattery();
+			const battery = await navigator.getBattery();
+			batteryLevel = `🔋 ${Math.floor(battery.level * 100)}%`;
 		} catch (error) {
 			console.log(error);
 		}
+		return batteryLevel;
+	};
+
+	private setSettings = (settings: ISettings) => {
+		const { battery, latency, vibration, dateTime } = settings;
+
+		this.batterySettings = {
+			showBattery: battery.showBattery,
+		};
+		this.vibrationSettings = {
+			showVibration: vibration.showVibration,
+		};
+		this.latencySettings = {
+			showLatency: latency.showLatency,
+			domainName: latency.domainName,
+			refreshFrequency: latency.refreshFrequency,
+		};
+		this.dateTimeSettings = {
+			showDate: dateTime.showDate,
+			showYear: dateTime.showYear,
+			showMonth: dateTime.showMonth,
+			showDay: dateTime.showDay,
+			showTime: dateTime.showTime,
+			showHours: dateTime.showHours,
+			showMinutes: dateTime.showMinutes,
+			showSeconds: dateTime.showSeconds,
+		};
 	};
 }

@@ -1,14 +1,15 @@
+
 .window {
     position: absolute;
-    border: 1px solid #333;
+    border: 1px solid var(--primary);
     background-color: #fff;
     display: flex;
     flex-direction: column;
 }
   
 .window-header {
-    background-color: #333;
-    color: #fff;
+    background-color: var(--primary);
+    color: var(--typo);
     padding: 0.25rem;
     display: flex;
     justify-content: space-between;
@@ -19,13 +20,12 @@
 .window-close-button {
     background-color: transparent;
     border: none;
-    color: #fff;
+    color: var(--typo);
     font-size: 16px;
     cursor: pointer;
 }
   
 .window-body {
-    padding: 0.5rem;
     flex: 1;
     align-self: stretch;
     max-height: 100%;

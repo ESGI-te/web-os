@@ -9,8 +9,8 @@ export interface ILatencySettings {
 export default class LatencySettings {
 	settings: ILatencySettings = {
 		showLatency: true,
-		domainName: "",
-		refreshFrequency: 60000,
+		domainName: "https://pokeapi.co/api/v2/pokemon/charizard",
+		refreshFrequency: 10000,
 	};
 	domainNameInput: HTMLInputElement;
 	refreshFrequencyInput: HTMLInputElement;
@@ -49,6 +49,7 @@ export default class LatencySettings {
 		this.domainNameInput = document.createElement("input");
 		this.domainNameInput.type = "text";
 		this.domainNameInput.id = "domainName";
+		this.domainNameInput.value = this.settings.domainName;
 		this.domainNameInput.disabled = !this.showLatencyCheckbox.checked;
 		const domainNameLabel = document.createElement("label");
 		domainNameLabel.htmlFor = "domainName";
@@ -60,6 +61,8 @@ export default class LatencySettings {
 		refreshFrequencyInputWrapper.classList.add("inputGroup");
 		this.refreshFrequencyInput = document.createElement("input");
 		this.refreshFrequencyInput.type = "number";
+		this.refreshFrequencyInput.value =
+			this.settings.refreshFrequency.toString();
 		this.refreshFrequencyInput.id = "refreshFrequency";
 		this.refreshFrequencyInput.disabled = !this.showLatencyCheckbox.checked;
 		const refreshFrequencyLabel = document.createElement("label");
