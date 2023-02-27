@@ -1,6 +1,6 @@
 import Desktop from "./components/Desktop";
 import SettingsManager from "./components/SettingsManager";
-import "./styles/index.scss";
+import "./styles/main.scss";
 
 const desktop = new Desktop();
 

@@ -1,6 +1,7 @@
 .settings {
     display: flex;
     height: 100%;
+    color: var(--typo);
 
     &__formWrapper {
         flex: 1;
@@ -8,7 +9,7 @@
         display: flex;
         flex-direction: column;
         row-gap: 2rem;
-
+        background-color: var(--primary);
         .buttonsWrapper {
             margin-top: auto;
             align-self: flex-end;
@@ -44,15 +45,16 @@
 .settings__sidebar {
     height: 100%;
     border-right: solid 1px lightgray;
+    background-color: var(--primary);
 }
 
 .settings__sidebarItem {
     padding: 1rem;
     cursor: pointer;
     border-bottom: solid 1px lightgray;
-
+    
     &.active {
-        background-color: lightblue;
+        background-color: var(--secondary);
     }
 }
 
