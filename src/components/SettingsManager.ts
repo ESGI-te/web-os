@@ -1,8 +1,22 @@
-import AppearanceSettings from "./settings/AppearanceSettings";
-import BatterySettings from "./settings/BatterySettings";
-import DateTimeSettings from "./settings/DateTimeSettings";
-import LatencySettings from "./settings/LatencySettings";
-import VibrationSettings from "./settings/VibrationSettings";
+import AppearanceSettings, {
+	IAppearanceSettings,
+} from "./settings/AppearanceSettings";
+import BatterySettings, { IBatterySettings } from "./settings/BatterySettings";
+import DateTimeSettings, {
+	IDatetimeSettings,
+} from "./settings/DateTimeSettings";
+import LatencySettings, { ILatencySettings } from "./settings/LatencySettings";
+import VibrationSettings, {
+	IVibrationSettings,
+} from "./settings/VibrationSettings";
+
+export interface ISettings {
+	battery: IBatterySettings;
+	latency: ILatencySettings;
+	dateTime: IDatetimeSettings;
+	vibration: IVibrationSettings;
+	appearance: IAppearanceSettings;
+}
 
 enum TABS {
 	VIBRATION = "vibration",
@@ -14,6 +28,7 @@ enum TABS {
 
 export default class SettingsManager {
 	private settingsElement: HTMLElement;
+	private formWrapperElement: HTMLElement;
 	private vibrationSettings: VibrationSettings;
 	private batterySettings: BatterySettings;
 	private latencySettings: LatencySettings;
@@ -27,7 +42,6 @@ export default class SettingsManager {
 		[TABS.APPEARANCE]: "Apparence",
 	};
 	private currentTab: TABS;
-	private activeSidebarItem: HTMLElement;
 
 	constructor() {
 		this.vibrationSettings = new VibrationSettings();
@@ -38,32 +52,40 @@ export default class SettingsManager {
 		this.settingsElement = document.createElement("div");
 		this.settingsElement.classList.add("settings");
 		this.createSidebar();
-		this.setTab(TABS.VIBRATION);
+		this.formWrapperElement = document.createElement("div");
+		this.formWrapperElement.classList.add("settings__formWrapper");
+		this.settingsElement.appendChild(this.formWrapperElement);
+		if (!localStorage.getItem("settings")) this.saveSettings();
+		this.handleTabChange(TABS.VIBRATION);
 	}
 
-	public saveSettings() {
-		const settings = {
+	public saveSettings = () => {
+		const settings: ISettings = {
 			vibration: this.vibrationSettings.getSettings(),
 			battery: this.batterySettings.getSettings(),
 			latency: this.latencySettings.getSettings(),
 			dateTime: this.dateTimeSettings.getSettings(),
 			appearance: this.appearanceSettings.getSettings(),
 		};
-		localStorage.setItem("settings", JSON.stringify(settings));
-	}
 
-	private setTab(tab: TABS) {
+		localStorage.setItem("settings", JSON.stringify(settings));
+
+		const event = new CustomEvent("settingsUpdated", {
+			detail: { settings: settings },
+		});
+		window.dispatchEvent(event);
+	};
+
+	private handleTabChange = (tab: TABS) => {
 		if (tab === this.currentTab) return;
-		const tabForm = this.getTabForm(tab);
-		if (!tabForm) return;
 		this.currentTab = tab;
 		this.settingsElement
 			.querySelectorAll(".settings__form")
 			.forEach((form) => form.remove());
-		this.settingsElement.append(tabForm);
-	}
+		this.createTabForm(tab);
+	};
 
-	private createSidebar() {
+	private createSidebar = () => {
 		const sidebar = document.createElement("ul");
 		sidebar.classList.add("settings__sidebar");
 		Object.entries(this.tabs).forEach(([key, value]) => {
@@ -74,9 +96,7 @@ export default class SettingsManager {
 			sidebar.appendChild(sidebarItem);
 			if (key === TABS.VIBRATION) sidebarItem.classList.add("active");
 			sidebarItem.addEventListener("click", () => {
-				this.setTab(key as TABS);
-
-				// Ajouter la classe "active" à l'élément cliqué
+				this.handleTabChange(key as TABS);
 				sidebar
 					.querySelectorAll(".settings__sidebarItem")
 					.forEach((item) => item.classList.remove("active"));
@@ -84,20 +104,54 @@ export default class SettingsManager {
 			});
 		});
 		this.settingsElement.append(sidebar);
-	}
+	};
 
-	private getTabForm(tab: TABS) {
-		const tabsForm = {
-			[TABS.VIBRATION]: this.vibrationSettings.createFormElement(),
-			[TABS.BATTERY]: this.batterySettings.createFormElement(),
-			[TABS.LATENCY]: this.latencySettings.createFormElement(),
-			[TABS.DATETIME]: this.dateTimeSettings.createFormElement(),
-			[TABS.APPEARANCE]: this.appearanceSettings.createFormElement(),
+	private createFormButtons = (tab: TABS): HTMLElement => {
+		const tabsApplyFunction = {
+			[TABS.VIBRATION]: this.vibrationSettings.applySettings,
+			[TABS.BATTERY]: this.batterySettings.applySettings,
+			[TABS.LATENCY]: this.latencySettings.applySettings,
+			[TABS.DATETIME]: this.dateTimeSettings.applySettings,
+			[TABS.APPEARANCE]: this.appearanceSettings.applySettings,
 		};
-		return tabsForm[tab];
-	}
 
-	public getElement() {
+		const buttonsWrapper = document.createElement("div");
+		buttonsWrapper.classList.add("buttonsWrapper");
+
+		const applyButton = document.createElement("button");
+		applyButton.textContent = "Appliquer";
+		applyButton.classList.add("apply");
+		const saveButton = document.createElement("button");
+		saveButton.textContent = "Sauvegarder";
+		saveButton.classList.add("save");
+
+		applyButton.addEventListener("click", () => tabsApplyFunction[tab]());
+		saveButton.addEventListener("click", () => this.saveSettings());
+
+		buttonsWrapper.append(applyButton, saveButton);
+
+		return buttonsWrapper;
+	};
+
+	private createTabForm = (tab: TABS): void => {
+		const tabsForm = {
+			[TABS.VIBRATION]: this.vibrationSettings.createFormElement,
+			[TABS.BATTERY]: this.batterySettings.createFormElement,
+			[TABS.LATENCY]: this.latencySettings.createFormElement,
+			[TABS.DATETIME]: this.dateTimeSettings.createFormElement,
+			[TABS.APPEARANCE]: this.appearanceSettings.createFormElement,
+		};
+		const form = tabsForm[tab]();
+		const buttons = this.createFormButtons(tab);
+
+		this.formWrapperElement
+			.querySelectorAll(".buttonsWrapper")
+			.forEach((form) => form.remove());
+
+		this.formWrapperElement.append(form, buttons);
+	};
+
+	public getElement = (): HTMLElement => {
 		return this.settingsElement;
-	}
+	};
 }
