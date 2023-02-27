@@ -10,6 +10,12 @@
     font-size: 0.75rem;
     padding-inline: 1rem;
 
+    .dateTime {
+        display: flex;
+        align-items: center;
+        column-gap: 0.5rem;
+    }
+
     .state {
         display: flex;
         align-items: center;
