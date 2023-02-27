@@ -6,6 +6,8 @@ export interface IAppearanceSettings {
 }
 
 export default class AppearanceSettings {
+	lightThemeRadio: HTMLInputElement;
+	darkThemeRadio: HTMLInputElement;
 	settings: IAppearanceSettings = {
 		isDarkTheme: false,
 		backgroundColor: "#FFFFFF",
@@ -35,37 +37,40 @@ export default class AppearanceSettings {
 
 		const themeInputWrapper = document.createElement("div");
 		themeInputWrapper.classList.add("inputGroup");
-		const lightThemeRadio = document.createElement("input");
-		lightThemeRadio.type = "radio";
-		lightThemeRadio.id = "lightTheme";
-		lightThemeRadio.name = "theme";
-		lightThemeRadio.value = "light";
-		lightThemeRadio.checked = !this.settings.isDarkTheme;
+		this.lightThemeRadio = document.createElement("input");
+		this.lightThemeRadio.type = "radio";
+		this.lightThemeRadio.id = "lightTheme";
+		this.lightThemeRadio.name = "theme";
+		this.lightThemeRadio.value = "light";
+		this.lightThemeRadio.checked = !this.settings.isDarkTheme;
 		const lightThemeLabel = document.createElement("label");
 		lightThemeLabel.htmlFor = "lightTheme";
 		lightThemeLabel.textContent = "Mode clair";
-		const darkThemeRadio = document.createElement("input");
-		darkThemeRadio.type = "radio";
-		darkThemeRadio.id = "darkTheme";
-		darkThemeRadio.name = "theme";
-		darkThemeRadio.value = "dark";
-		darkThemeRadio.checked = this.settings.isDarkTheme;
+
+		this.darkThemeRadio = document.createElement("input");
+		this.darkThemeRadio.type = "radio";
+		this.darkThemeRadio.id = "darkTheme";
+		this.darkThemeRadio.name = "theme";
+		this.darkThemeRadio.value = "dark";
+		this.darkThemeRadio.checked = this.settings.isDarkTheme;
 		const darkThemeLabel = document.createElement("label");
 		darkThemeLabel.htmlFor = "darkTheme";
 		darkThemeLabel.textContent = "Mode sombre";
 		themeInputWrapper.append(
-			lightThemeRadio,
+			this.lightThemeRadio,
 			lightThemeLabel,
-			darkThemeRadio,
+			this.darkThemeRadio,
 			darkThemeLabel
 		);
 		themeSettingsWrapper.appendChild(themeInputWrapper);
-		lightThemeRadio.addEventListener("change", () => {
-			this.setLightTheme();
+		this.lightThemeRadio.addEventListener("change", (e) => {
+			const target = e.target as HTMLInputElement;
+			this.setTheme(target.value);
 		});
 
-		darkThemeRadio.addEventListener("change", () => {
-			this.setDarkTheme();
+		this.darkThemeRadio.addEventListener("change", (e) => {
+			const target = e.target as HTMLInputElement;
+			this.setTheme(target.value);
 		});
 
 		// Input to change background color
@@ -92,12 +97,8 @@ export default class AppearanceSettings {
 		return formElement;
 	};
 
-	private setLightTheme = () => {
-		this.settings.isDarkTheme = false;
-	};
-
-	private setDarkTheme = () => {
-		this.settings.isDarkTheme = true;
+	private setTheme = (theme: string) => {
+		this.settings.isDarkTheme = theme === "dark";
 	};
 
 	private setBackgroundColor(color: string) {
