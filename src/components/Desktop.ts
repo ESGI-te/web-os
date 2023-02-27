@@ -18,7 +18,7 @@ export default class Desktop {
 		if (storedSettings) {
 			this.settings = JSON.parse(storedSettings).appearance;
 		}
-
+		this.setTheme(this.settings.isDarkTheme);
 		this.toolbar = new Toolbar();
 		this.windows = [];
 
@@ -56,7 +56,6 @@ export default class Desktop {
 	}
 
 	private setTheme = (isDarkTheme: boolean) => {
-		if (this.settings.isDarkTheme === isDarkTheme) return;
 		this.settings.isDarkTheme = isDarkTheme;
 		isDarkTheme
 			? document.body.classList.add("dark-theme")

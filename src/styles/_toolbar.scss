@@ -20,6 +20,21 @@
         display: flex;
         align-items: center;
         column-gap: 1rem;
+
+        & > * {
+            display: flex;
+            align-items: center;
+            column-gap: 0.25rem;
+
+            svg {
+                width: 1rem;
+                height: 1rem;
+            path {
+                width: 1rem;
+                height: 1rem;
+                fill: var(--typo);
+            }}
+        }
     }
 }
 
