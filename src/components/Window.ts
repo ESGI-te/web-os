@@ -37,8 +37,8 @@ class Window implements WindowInterface {
 		this.windowElement = document.createElement("div");
 		this.windowElement.style.zIndex = "0";
 		this.windowElement.classList.add("window");
-		this.windowElement.style.width = `${width}px`;
-		this.windowElement.style.height = `${height}px`;
+		this.windowElement.style.maxWidth = `${width}px`;
+		this.windowElement.style.maxHeight = `${height}px`;
 		this.windowElement.addEventListener("mousedown", () => {
 			this.focus();
 		});

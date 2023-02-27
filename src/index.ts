@@ -18,8 +18,6 @@ windowContent2.textContent = "It works 2";
 const windowContent3 = document.createElement("div");
 windowContent3.textContent = "Calculatrice";
 
-
-
 desktop.createWindow({
 	title: "Paramètres",
 	x: 50,
@@ -39,12 +37,9 @@ desktop.createWindow({
 
 desktop.createWindow({
 	title: "Calulator",
-	x: 100,
+	x: 0,
 	y: 100,
 	width: 550,
 	height: 620,
 	content: calculator.createCalculator(),
 });
-
-
-
