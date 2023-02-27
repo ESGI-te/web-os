@@ -35,10 +35,8 @@ export default class Desktop {
 				const updatedSettings = event.detail.settings;
 				if (this.settings === updatedSettings) return;
 				const { backgroundColor, isDarkTheme } = updatedSettings;
-				if (this.settings.backgroundColor !== backgroundColor)
-					this.desktopElement.style.backgroundColor = backgroundColor;
-				if (this.settings.isDarkTheme !== isDarkTheme)
-					console.log("dark theme activated");
+				this.setBackgroundColor(backgroundColor);
+				this.setTheme(isDarkTheme);
 			}
 		);
 	}
@@ -56,4 +54,17 @@ export default class Desktop {
 		this.taskbar.addWindow(window);
 		return window;
 	}
+
+	private setTheme = (isDarkTheme: boolean) => {
+		if (this.settings.isDarkTheme === isDarkTheme) return;
+		this.settings.isDarkTheme = isDarkTheme;
+		isDarkTheme
+			? document.body.classList.add("dark-theme")
+			: document.body.classList.remove("dark-theme");
+	};
+
+	private setBackgroundColor = (backgroundColor: string) => {
+		if (this.settings.backgroundColor === backgroundColor) return;
+		this.desktopElement.style.backgroundColor = backgroundColor;
+	};
 }
