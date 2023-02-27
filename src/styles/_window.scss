@@ -10,21 +10,27 @@
 .window-header {
     background-color: var(--dark);
     color: var(--typo);
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor:grab;
     border-top-right-radius: 0.5rem;
     border-top-left-radius: 0.5rem;
+
 }
   
 .window-close-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: transparent;
     border: none;
     color: var(--typo);
     font-size: 16px;
     cursor: pointer;
+    line-height: 1;
+
 }
   
 .window-body {
