@@ -42,15 +42,15 @@ desktop.createWindow({
 	title: "Calulator",
 	x: 0,
 	y: 100,
-	width: 550,
-	height: 620,
+	width: 400,
+	height: 600,
 	content: calculator.createCalculator(),
 });
 desktop.createWindow({
 	title: "Tic Tac Toe",
 	x: 50,
 	y: 50,
-	width: 325,
+	width: 320,
 	height: 430,
 	content: ticTacToeGame.getElement(),
 });
