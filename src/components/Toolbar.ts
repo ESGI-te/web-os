@@ -1,7 +1,4 @@
 import { ISettings } from "./SettingsManager";
-import batteryIcon from "../../public/images/battery.svg";
-import latencyIcon from "../../public/images/latency.svg";
-import vibrationIcon from "../../public/images/vibration.svg";
 
 interface DisplayDateSettings {
 	showDate?: boolean;
