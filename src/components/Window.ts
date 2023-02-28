@@ -1,3 +1,5 @@
+import { generateUUID } from "../helpers";
+
 export interface WindowOptions {
 	title: string;
 	x: number;
@@ -24,6 +26,8 @@ class Window implements WindowInterface {
 	private bodyElement: HTMLElement;
 	private closeButton: HTMLElement;
 	private desktopElement: HTMLElement | null;
+	private title: string;
+	private id: string;
 
 	private zIndex: number = 0;
 	private x: number = 0;
@@ -33,8 +37,11 @@ class Window implements WindowInterface {
 	private dragStartY: number = 0;
 
 	constructor({ title, x, y, width, height, content }: WindowOptions) {
+		this.title = title;
+		this.id = generateUUID();
 		this.desktopElement = document.querySelector(".desktop");
 		this.windowElement = document.createElement("div");
+		this.windowElement.id = this.id;
 		this.windowElement.style.zIndex = "0";
 		this.windowElement.classList.add("window");
 		this.windowElement.style.width = `${width}px`;
@@ -75,7 +82,18 @@ class Window implements WindowInterface {
 
 		this.closeButton = document.createElement("button");
 		this.closeButton.classList.add("window-close-button");
-		this.closeButton.innerText = "X";
+		this.closeButton.innerHTML = `
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<g clip-path="url(#clip0_6_13431)">
+			<path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="#323232"/>
+			</g>
+			<defs>
+			<clipPath id="clip0_6_13431">
+			<rect width="20" height="20" fill="white"/>
+			</clipPath>
+			</defs>
+			</svg>
+		`;
 		this.closeButton.addEventListener("click", () => {
 			this.close();
 		});
@@ -117,6 +135,11 @@ class Window implements WindowInterface {
 		}
 
 		this.windowElement.style.zIndex = `${this.zIndex}`;
+
+		const event = new CustomEvent("windowFocus", {
+			detail: { id: this.id },
+		});
+		window.dispatchEvent(event);
 	}
 
 	private render() {
@@ -144,11 +167,15 @@ class Window implements WindowInterface {
 	}
 
 	public getTitle(): string {
-		return this.headerElement.innerText;
+		return this.title;
 	}
 
 	public getWindowElement() {
 		return this.windowElement;
+	}
+
+	public getId() {
+		return this.id;
 	}
 }
 

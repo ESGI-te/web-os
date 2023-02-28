@@ -1,0 +1,123 @@
+.settings {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: var(--typo);
+
+    @media screen and (min-width: 768px) {
+        flex-direction: row;
+    }
+
+    &__formWrapper {
+        flex: 1;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        row-gap: 2rem;
+        background-color: var(--primary);
+
+        .buttonsWrapper {
+            margin-top: auto;
+            align-self: flex-end;
+            display: flex;
+            align-items: center;
+            column-gap: 1rem;
+
+            button {
+                border: none;
+                padding: 0.75rem 1rem;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                border: solid 1px var(--secondary);
+                                
+                &:first-child {
+                    background-color: var(--secondary);
+                    color: var(--typo);
+                }
+
+                &:last-child {
+                    color: var(--secondary);
+                    background-color: var(--primary);
+                    border: solid 1px var(--secondary);
+                }
+            }
+
+            
+        }
+    }
+
+    &__form {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        row-gap: 2rem;
+
+        input[type="text"], input[type="number"] {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            border: solid 1px lightgray;
+        }
+        input[type="color"], input[type="radio"] {
+            cursor: pointer;
+        }
+    }
+
+    .form__section {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+    }
+}
+
+.settings__sidebar {
+    height: 100%;
+    border-right: solid 1px lightgray;
+    background-color: var(--primary);
+}
+
+.settings__sidebarItem {
+    padding: 1rem;
+    cursor: pointer;
+    border-bottom: solid 1px lightgray;
+    
+    &.active {
+        background-color: var(--secondary);
+    }
+}
+
+.settings__form--vibration, .settings__form--battery, .settings__form--datetime, .settings__form--appearance {
+    
+    .inputGroup {
+        display: flex;
+        align-items: center;
+        column-gap: 0.5rem;
+    }
+}
+
+.settings__form--latency {
+    .inputGroup {
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.5rem;
+    }
+    & >:first-child {
+        flex-direction: row;
+        align-items: center;
+        column-gap: 0.5rem;
+    }
+}
+
+.settings__form--appearance {
+    // .inputGroup {
+    //     display: flex;
+    //     flex-direction: column;
+    //     row-gap: 0.5rem;
+    // }
+    // & >:first-child {
+    //     flex-direction: row;
+    //     align-items: center;
+    //     column-gap: 0.5rem;
+    // }
+
+}
+

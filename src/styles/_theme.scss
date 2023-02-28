@@ -1,0 +1,32 @@
+:root {
+    /* Light mode */
+    --primary: #FBF6F0;
+    --secondary: #AEE6E6;
+    --typo: #222831;
+    --dark: #EAE0DA;
+
+    /* Dark mode */
+    .dark-theme {
+        --dark: #212121;
+        --primary: #222831 !important;
+        --secondary: #30475E !important;
+        --typo: #FBF6F0 !important;
+    }
+
+      // .prefersColor {
+    //     /* Light mode */
+    //     @media (prefers-color-scheme: light) {
+    //         --primary: #FBF6F0;
+    //         --secondary: #AEE6E6;
+    //         --typo: #222831
+    //     }
+        
+    //     /* Dark mode */
+    //     @media (prefers-color-scheme: dark) {
+    //         --primary: #222831;
+    //         --secondary: #30475E;
+    //         --typo: #FBF6F0;
+    //     }
+    // }
+    
+}
