@@ -3,16 +3,16 @@ import SettingsManager from "./components/SettingsManager";
 import "./styles/main.scss";
 import Calculator from "./components/Calculator";
 import TicTacToeGame from "./components/TicTacToe";
+import Watch from "./components/watch";
 
 const desktop = new Desktop();
 const ticTacToeGame = new TicTacToeGame();
+const watch = new Watch();
+const settingsManager = new SettingsManager();
+const calculator = new Calculator();
 
 const windowContent1 = document.createElement("div");
-windowContent1.textContent = "It works 1";
-
-const settingsManager = new SettingsManager();
-
-const calculator = new Calculator();
+windowContent1.textContent = "Watch";
 
 const windowContent2 = document.createElement("div");
 windowContent2.textContent = "It works 2";
@@ -30,12 +30,12 @@ desktop.createWindow({
 });
 
 desktop.createWindow({
-	title: "Window 2",
+	title: "Watch",
 	x: 100,
 	y: 100,
-	width: 400,
-	height: 250,
-	content: windowContent2,
+	width: 500,
+	height: 580,
+	content: watch.getElement(),
 });
 
 desktop.createWindow({
