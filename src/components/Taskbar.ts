@@ -26,6 +26,7 @@ export default class Taskbar {
 		button.addEventListener("click", () => {
 			if (window.isOpen()) {
 				window.close();
+				window.focus();
 			} else {
 				window.open();
 			}
@@ -36,13 +37,10 @@ export default class Taskbar {
 	}
 
 	private setWindowActive = (id: string) => {
-		this.windows.forEach((window) => {
-			if (window.getId() === id) {
-				document
-					.querySelectorAll(".taskbar-item")
-					.forEach((w) => w.classList.remove("active"));
-				document.querySelector(`.taskbar-item#${id}`)?.classList.add("active");
-			}
-		});
+		document
+			.querySelectorAll(".taskbar-item")
+			.forEach((w) => w.classList.remove("active"));
+		const activeWindow = document.querySelector(`.taskbar-item#${id}`);
+		activeWindow?.classList.add("active");
 	};
 }

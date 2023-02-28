@@ -30,6 +30,9 @@
     cursor: pointer;
     line-height: 1;
 
+    svg path {
+        fill: var(--typo);
+    }
 }
   
 .window-body {
