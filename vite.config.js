@@ -9,8 +9,3 @@ export default defineConfig({
 	},
 });
 
-module.exports = {
-	build: {
-	  outDir: 'dist'
-	}
-  }
